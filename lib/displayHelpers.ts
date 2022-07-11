@@ -125,7 +125,23 @@ const checkAddress = (input: string, chainAddressPrefix: string) => {
 
   return null;
 };
-
+/**
+ * Returns an error message for invalid addresses.
+ *
+ * Returns null of there is no error.
+ */
+const checkValidatorAddress = (input: string, chainAddressPrefix: string) => {
+  if (!input) return "Empty";
+  try {
+    const data = fromBech32(input).data;
+    const address = toBech32(chainAddressPrefix, data);
+    checkAddress(address, chainAddressPrefix);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return error.toString();
+  }
+  return null;
+};
 /**
  * Returns a link to a transaction in an explorer if an explorer is configured
  * for transactions. Returns null otherwise.
@@ -145,4 +161,5 @@ export {
   examplePubkey,
   checkAddress,
   explorerLinkTx,
+  checkValidatorAddress,
 };
